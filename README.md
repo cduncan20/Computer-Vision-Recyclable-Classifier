@@ -3,7 +3,22 @@ Final Project for Advanced Computer Vision - Recycleable Classifier
 
 
 ## Using git
-git flow is going to be critical for development on this project. 
+git flow is going to be critical for development on this project.
+
+### Fancy git repo dispaly for bashrc
+In order to display the current local branch to you bash terminal display execute the following to open your `bashrc` settings: 
+```
+$ gedit ~/.bashrc
+```
+
+Add the following snippet to the bottom of your bash rc file, be careful not to delete anything:
+```
+# Fancy git terminal parsing 
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
+```
 
 ### Branches and branching best practices
 For the sake of preserving correct operation and successes `master` will be reserved for functioning and successful code that we want to be saved going forward. 
