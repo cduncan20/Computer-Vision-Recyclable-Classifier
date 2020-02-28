@@ -1,6 +1,9 @@
 # csci508-final
 Final Project for Advanced Computer Vision - Recycleable Classifier 
 
+## Tyler TODO
+1. Get poetry install instructions added 
+1. Init the repos with a basic main.py and all of that stuff
 
 ## Using git
 git flow is going to be critical for development on this project.
