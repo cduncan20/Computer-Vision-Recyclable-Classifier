@@ -10,11 +10,11 @@ import csv
 import sys
 import cv2
 import pickle
+import pathlib
 
-
-def createDict(images_path):
-    # images_path = './extracted_images/'
-    dirlist = os.listdir(images_path)
+# Create dictionary of Labels
+def createDict(path_images, path_save, dict_name):
+    dirlist = os.listdir(path_images)
 
     single = []
     multiple = []
@@ -27,13 +27,6 @@ def createDict(images_path):
             multiple.append(item)
 
     multiple.sort()  # alphabetical order
-
-    # single_ascii = []
-
-    # for item in single:
-    #	single_ascii.append(ord(item)) #converts strings to ascii equivalent
-
-    # single_ascii.sort() #ascii numerical order
     single.sort()  # ascii numerical order
 
     dict = {}
@@ -47,53 +40,49 @@ def createDict(images_path):
         counter += 1
 
     # writing to an Excel file
-    file = open("LabelDict.csv", "w")
-    w = csv.writer(file)
-
+    file_path_and_name = os.path.join(path_save, dict_name) # Define file path & name
+    file = open(file_path_and_name, "w") # Create file given path and name
+    
+    w = csv.writer(file) # Initialize writer
     for key, val in dict.items():
-        w.writerow([key, val])
+        w.writerow([key, val]) # Write all class types and class numbers to file
 
     file.close()
 
-
-def loadDict(file_name):
+# Load dictionary of labels
+def loadDict(path_save, dict_name):
+    file_path_and_name = os.path.join(path_save, dict_name) # Define file path & name
     dict = {}
-    with open(file_name) as file:
+    with open(file_path_and_name) as file:
         readCSV = csv.reader(file)
         for row in readCSV:
             if len(row) > 0:
                 dict[row[0]] = int(row[1])
     return dict
 
-
-def loadDict_BA(file_name):
-    dict = {}
-    with open(file_name) as file:
-        readCSV = csv.reader(file)
-        for row in readCSV:
-            if len(row) > 0:
-                dict[int(row[1])] = row[0]
-    return dict
-
-
-def loadDataset(file_name1, file_name2, rate=0.2):  # file_name1 location of all characters, file_name2 dict
-    dict = loadDict(file_name2)
-    ds1 = os.listdir(file_name1)
-    file_count = sum([len(files) for r, d, files in os.walk(file_name1)])
-    counter = 0
-    X = np.empty((0, 384, 512), dtype=np.uint8)
-    Y = np.empty((0, 1), dtype=np.uint8)
-    for d in ds1:
-        folder = os.path.join(file_name1, d)
-        ds2 = os.listdir(folder)
-        d = d.lower()
+# Create Pickle file of input and output data
+def loadDataset(path_images, path_save, dict_name, rate=0.2):
+    dict = loadDict(path_save, dict_name) # Load dictionary of labels
+    ds1 = os.listdir(path_images) # Define path of images 
+    file_count = sum([len(files) for r, d, files in os.walk(path_images)]) # Count number of files in images location
+    
+    # Cycle through each image within each folder and create array of input and output data
+    width = 384
+    height = 512
+    X = np.empty((0, width, height), dtype=np.uint8) # Define standard input (X) image size
+    Y = np.empty((0, 1), dtype=np.uint8) # Define standard output (Y) label size
+    counter = 0 # Initialize counter to print how many images have been processed
+    for d in ds1: # Cycle through each folder wihtin images location
+        folder = os.path.join(path_images, d) # Define folder path of all images within class
+        ds2 = os.listdir(folder) # Create array of all images names within folder
+        d = d.lower() # Ensure all file names are lowercase for when finding label within .csv file
         for d2 in ds2:
-            filei = os.path.join(folder, d2)
-            image = cv2.imread(filei)
+            filei = os.path.join(folder, d2) # Define path to image 'd2' within class 'ds2'
+            image = cv2.imread(filei) # Read image
             image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convert to gray
-            npi = np.asarray(image).reshape(384, 512)  # might need to change
-            X = np.append(X, [npi], axis=0)  # might need to change
-            Y = np.append(Y, dict[d])
+            npi = np.asarray(image).reshape(width, height)  # Reshape image to defined width and height
+            X = np.append(X, [npi], axis=0)  # Append image to input array
+            Y = np.append(Y, dict[d]) # Append label of image to output array
             counter += 1
             output_string = f"Image File {counter} of {file_count}\n"
             sys.stdout.write(output_string)
@@ -103,15 +92,19 @@ def loadDataset(file_name1, file_name2, rate=0.2):  # file_name1 location of all
 
 
 if __name__ == '__main__':
-    path = '/home/casey/Documents/CSM Grad School/2020/CSCI 508 - Adv CV/Project/Possible Datasets/TEST'
-    createDict(path)
+    # Create dictionary of labels and their corresponding labels
+    cwd = pathlib.Path.cwd()
+    path_images = cwd.joinpath('csci508_final', 'Images', 'TRIAL', 'TRIAL IMAGES') # Path to files
+    path_save = cwd.joinpath('csci508_final', 'Images', 'TRIAL') # Path for where to save files
+    dict_name = 'LabelDict.csv' # File that saves classes and their corresponding labels
+    createDict(path_images, path_save, dict_name) # Create dictionary
 
-    dict_name = 'LabelDict.csv'
-    dict = loadDict(dict_name)
-    # for key,val in dict.items():
-    #	print("{} : {}".format(key,val))
-
+    # Create inpout (X) and output(Y) data from images within designated path
+    X, Y = loadDataset(path_images, path_save, dict_name, rate=0.2)
     # x_train, x_test, y_train, y_test = loadDataset(path,dict_name,rate = 0.2)
-    X, Y = loadDataset(path, dict_name, rate=0.2)
-    with open('X_Y_Data.pickle', 'wb') as f:
+
+    # Save X & Y data to a pickle file within designated path
+    pickle_name = 'X_Y_Data.pickle'
+    file_path_and_name = os.path.join(path_save, pickle_name) # Define file path & name
+    with open(file_path_and_name, 'wb') as f:
         pickle.dump([X, Y], f)
