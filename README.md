@@ -1,12 +1,9 @@
 # csci508-final
 Final Project for Advanced Computer Vision - Recycleable Classifier 
 
-## Tyler TODO
-1. Get poetry install instructions added 
-1. Init the repos with a basic main.py and all of that stuff
 
 ## Installation and Usage
-Installing this project can be done in a veriaety of ways but the suggested method relies on using a virtual environment provided through [Poetry](https://python-poetry.org/docs/).
+Installing this project can be done in a variety of ways but the suggested method relies on using a virtual environment provided through [Poetry](https://python-poetry.org/docs/).
 
 It is also recommended that you use pyenv to manage your variety of python environments. Pyenv can be installed by executing:
 ```
