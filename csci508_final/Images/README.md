@@ -16,7 +16,7 @@ Within each folder should be a folder called '<FOLDER NAME> IMAGES'. For example
 The CNN model is trained using a pickle file which holds all of this data as an input array (X) of training & test images and an output array (Y) of labeles corresponding to each image. To create this pickle file, follow the following steps:
     1) Go to the ~/csci508-final/csci508_final directory and open the labeldata.py file in your desired text editor.
 
-    2) Change the path to the images and path to saved files depending on if you are using the TRIAL IMAGES or the TRIANING & TEST IMAGES. 
+    2) Change the path to the images and path to saved files depending on if you are using the TRIAL IMAGES or the TRAINING & TEST IMAGES. 
         2a) For TRIAL IMAGES, change the following variables to the following wihtin the main function:
         path_images = cwd.joinpath('csci508_final', 'Images', 'TRIAL', 'TRIAL IMAGES')
         path_save = cwd.joinpath('csci508_final', 'Images', 'TRIAL')
