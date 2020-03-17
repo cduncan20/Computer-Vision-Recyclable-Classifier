@@ -43,7 +43,7 @@ The CNN model is trained using a pickle file which holds all of this data as an 
 To make sure the labels are correct, you can run the pickle_file_test.py file to cycle through each image in X and verify that its label in Y is correct. To do this, perform the following steps:
     1) Go to the ~/csci508-final/csci508_final directory and open the pickle_file_test.py file in your desired text editor.
 
-    2) Change the path of the X_Y_Data.pickle file depending on if you are using the TRIAL IMAGES or the TRIANING & TEST IMAGES. 
+    2) Change the path of the X_Y_Data.pickle file depending on if you are using the TRIAL IMAGES or the TRAINING & TEST IMAGES. 
         2a) For TRIAL IMAGES, change the following variables to the following wihtin the main function:
         path_save = cwd.joinpath('csci508_final', 'Images', 'TRIAL')
 
