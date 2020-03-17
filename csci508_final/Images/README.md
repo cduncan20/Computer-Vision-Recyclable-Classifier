@@ -4,7 +4,7 @@ Class: CSCI 508 Final
 File Location: ~/csci508-final/csci508_final/Images
 
 **OVERVIEW**
-Here lies all image data that will be used for trail, training, and test puproses for this project. Currently, there are two folders within the same directory as this README file:
+Here lies all image data that will be used for trial, training, and test purposes for this project. Currently, there are two folders within the same directory as this README file:
     1) TRIAL
        Contains a small amount of images for code testing purposes
 
