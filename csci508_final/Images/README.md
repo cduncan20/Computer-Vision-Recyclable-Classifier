@@ -21,7 +21,7 @@ The CNN model is trained using a pickle file which holds all of this data as an 
         path_images = cwd.joinpath('csci508_final', 'Images', 'TRIAL', 'TRIAL IMAGES')
         path_save = cwd.joinpath('csci508_final', 'Images', 'TRIAL')
 
-        2b) For TRIANING & TEST, change the following variables to the following wihtin the main function:
+        2b) For TRAINING & TEST, change the following variables to the following wihtin the main function:
         path_images = cwd.joinpath('csci508_final', 'Images', 'TRIANING & TEST', 'TRIANING & TEST IMAGES')
         path_save = cwd.joinpath('csci508_final', 'Images', 'TRIANING & TEST')
 
