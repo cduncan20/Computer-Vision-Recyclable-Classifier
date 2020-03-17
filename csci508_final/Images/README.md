@@ -22,7 +22,7 @@ The CNN model is trained using a pickle file which holds all of this data as an 
         path_save = cwd.joinpath('csci508_final', 'Images', 'TRIAL')
 
         2b) For TRAINING & TEST, change the following variables to the following wihtin the main function:
-        path_images = cwd.joinpath('csci508_final', 'Images', 'TRIANING & TEST', 'TRIANING & TEST IMAGES')
+        path_images = cwd.joinpath('csci508_final', 'Images', 'TRAINING & TEST', 'TRAINING & TEST IMAGES')
         path_save = cwd.joinpath('csci508_final', 'Images', 'TRIANING & TEST')
 
     3) Open up a new terminal window and change the terminal's working director to the following:
