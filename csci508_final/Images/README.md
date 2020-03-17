@@ -47,7 +47,7 @@ To make sure the labels are correct, you can run the pickle_file_test.py file to
         2a) For TRIAL IMAGES, change the following variables to the following wihtin the main function:
         path_save = cwd.joinpath('csci508_final', 'Images', 'TRIAL')
 
-        2b) For TRIANING & TEST, change the following variables to the following wihtin the main function:
+        2b) For TRAINING & TEST, change the following variables to the following wihtin the main function:
         path_save = cwd.joinpath('csci508_final', 'Images', 'TRIANING & TEST')
 
     3) Open up a new terminal window and change the terminal's working director to the following:
