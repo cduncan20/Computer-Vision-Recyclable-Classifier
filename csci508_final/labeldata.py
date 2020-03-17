@@ -65,7 +65,7 @@ def loadDict(path_save, dict_name):
     return dict
 
 # Create Pickle file of input and output data
-def loadDataset(path_images, path_save, dict_name, rate=0.2):
+def loadDataset(path_images, path_save, dict_name, color, rate=0.2):
     # Load dictionary of labels
     dict = loadDict(path_save, dict_name)
 
@@ -86,7 +86,10 @@ def loadDataset(path_images, path_save, dict_name, rate=0.2):
     # Define size of input and output data arrays
     width = 512 # Standard image width
     height = 384 # Standard image width
-    X = np.empty((0, height, width), dtype=np.uint8) # Define standard input (X) image size
+    if color:
+        X = np.empty((0, height, width, 3), dtype=np.uint8) # Define standard input (X) image size
+    else:
+        X = np.empty((0, height, width), dtype=np.uint8) # Define standard input (X) image size
     Y = np.empty((0, 1), dtype=np.uint8) # Define standard output (Y) label size
 
     # Cycle through each image within each folder and create array of input and output data
@@ -101,8 +104,13 @@ def loadDataset(path_images, path_save, dict_name, rate=0.2):
             # Cycle through each image within class_i_path and save image to X and class label to Y
             class_i_image_path = os.path.join(class_i_path, class_i_image) # Define path to image 'class_i_image' within class 'class_i'
             image = cv2.imread(class_i_image_path) # Read image
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convert to gray
-            npi = np.asarray(image).reshape(height, width)  # Reshape image to defined width and height
+
+            if color:
+                npi = np.asarray(image).reshape(height, width, 3)  # Reshape image to defined width and height
+            else:
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convert to gray
+                npi = np.asarray(image).reshape(height, width)  # Reshape image to defined width and height
+
             X = np.append(X, [npi], axis=0)  # Append image to input array
             Y = np.append(Y, dict[class_i]) # Append label of image to output array
             counter += 1 # Count total number of images saved
@@ -126,7 +134,8 @@ if __name__ == '__main__':
     createDict(path_images, path_save, dict_name) # Create dictionary
 
     # Create inpout (X) and output(Y) data from images within designated path
-    X, Y = loadDataset(path_images, path_save, dict_name, rate=0.2)
+    color = True # For saving color images to X, set to True. For black & white, set to False
+    X, Y = loadDataset(path_images, path_save, dict_name, color, rate=0.2)
 
     # Split data into training and test. This can be done later too.
     # x_train, x_test, y_train, y_test = loadDataset(path,dict_name,rate = 0.2)
