@@ -8,7 +8,7 @@ Here lies all image data that will be used for trail, training, and test puprose
     1) TRIAL
        Contains a small amount of images for code testing purposes
 
-    2) TRIANING & TEST
+    2) TRAINING & TEST
        Will contain al training & test data used for this project
 
 Within each folder should be a folder called '<FOLDER NAME> IMAGES'. For example, in the TRIAL folder there should be a folder called 'TRAIL IMAGES'. Within this folder is all of the images, which should be separated into classes. For example, if there are a bunch of photos showing only glass objects, all of these images should be placed into their own folder named 'glass' which corresponds to the class 'glass'. Equivalently for photos showing only paper, metal, plastic, etc. In the future, there will be a .zip file where you can export all images within their corresponding labeled folders into this '<FOLDER NAME> IMAGES' folder.
