@@ -36,7 +36,7 @@ The CNN model is trained using a pickle file which holds all of this data as an 
     For example, there are 18 images total in the TRIAL IMAGES folder, so the last line that should appear will be:
     "Image File 18 of 18"
 
-    5) Once the labeldata.py file has finished running, there should be a LabelDict.csv file within the folder containing the folder holding all of the images and a X_Y_Data.pickle file holding all of the data. For example, if performing this on the TRAIL IMAGES the .csv and ,pickle files will be in the TRIAL folder. 
+    5) Once the labeldata.py file has finished running, there should be a LabelDict.csv file within the folder containing the folder holding all of the images and a X_Y_Data.pickle file holding all of the data. For example, if performing this on the TRIAL IMAGES the .csv and ,pickle files will be in the TRIAL folder. 
         - Opening the .csv file will show each class name and its corresponding label.
         - The .pickle file holds an input variable (X), which is an array including each training image and an output variable (Y), which is an array including the label associated with the class of each image in X.
 
