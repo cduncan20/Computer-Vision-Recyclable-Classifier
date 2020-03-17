@@ -65,7 +65,7 @@ def loadDict(path_save, dict_name):
     return dict
 
 # Create Pickle file of input and output data
-def loadDataset(path_images, path_save, dict_name, color, rate=0.2):
+def loadDataset(path_images, path_save, dict_name, is_color = True):
     # Load dictionary of labels
     dict = loadDict(path_save, dict_name)
 
@@ -86,7 +86,7 @@ def loadDataset(path_images, path_save, dict_name, color, rate=0.2):
     # Define size of input and output data arrays
     width = 512 # Standard image width
     height = 384 # Standard image width
-    if color:
+    if is_color:
         X = np.empty((0, height, width, 3), dtype=np.uint8) # Define standard input (X) image size
     else:
         X = np.empty((0, height, width), dtype=np.uint8) # Define standard input (X) image size
@@ -105,7 +105,7 @@ def loadDataset(path_images, path_save, dict_name, color, rate=0.2):
             class_i_image_path = os.path.join(class_i_path, class_i_image) # Define path to image 'class_i_image' within class 'class_i'
             image = cv2.imread(class_i_image_path) # Read image
 
-            if color:
+            if is_color:
                 npi = np.asarray(image).reshape(height, width, 3)  # Reshape image to defined width and height
             else:
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convert to gray
@@ -119,9 +119,7 @@ def loadDataset(path_images, path_save, dict_name, color, rate=0.2):
             output_string = f"Image File {counter} of {file_count}\n"
             sys.stdout.write(output_string)
             sys.stdout.flush()
-    
-    # Split data into training and test. This can be done later too.
-    # x_train,x_test,y_train,y_test = train_test_split(X,Y,test_size = rate)
+
     return X, Y
 
 
@@ -132,13 +130,12 @@ if __name__ == '__main__':
     path_save = cwd.joinpath('csci508_final', 'Images', 'TRIAL') # Path for where to save files
     dict_name = 'LabelDict.csv' # File that saves classes and their corresponding labels
     createDict(path_images, path_save, dict_name) # Create dictionary
-
-    # Create inpout (X) and output(Y) data from images within designated path
-    color = True # For saving color images to X, set to True. For black & white, set to False
-    X, Y = loadDataset(path_images, path_save, dict_name, color, rate=0.2)
-
-    # Split data into training and test. This can be done later too.
-    # x_train, x_test, y_train, y_test = loadDataset(path,dict_name,rate = 0.2)
+    
+    # Create input (X) and output(Y) data from images within designated path.
+    # Function takes in variables path_images, path_save, dict_name, and is_color.
+    # Variables path_images, path_save, dict_name will always be defined above.
+    # Variabele is_color is set to 'True' as default. Change is_color variable to 'False' for black & white photos.
+    X, Y = loadDataset(path_images, path_save, dict_name)
 
     # Save X & Y data to a pickle file within designated path
     pickle_name = 'X_Y_Data.pickle'

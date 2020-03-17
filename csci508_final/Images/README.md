@@ -17,15 +17,15 @@ The CNN model is trained using a pickle file which holds all of this data as an 
 	1) Go to the ~/csci508-final/csci508_final directory and open the labeldata.py file in your desired text editor.
 	
 	2) Change the path to the images and path to saved files depending on if you are using the TRIAL_IMAGES or the TRAINING_&_TEST_IMAGES. 
-		2a) For TRIAL_IMAGES, change the following variables to the following wihtin the main function:
+		2a) For TRIAL_IMAGES, change the following variables to the following wihtin the main function (lines 130 & 131):
 		path_images = cwd.joinpath('csci508_final', 'Images', 'TRIAL', 'TRIAL_IMAGES')
 		path_save = cwd.joinpath('csci508_final', 'Images', 'TRIAL')
 
-		2b) For TRAINING_&_TEST, change the following variables to the following wihtin the main function:
-    		path_images = cwd.joinpath('csci508_final', 'Images', 'TRAINING_&_TEST', 'TRAINING_&_TEST_IMAGES')
+		2b) For TRAINING_&_TEST, change the following variables to the following wihtin the main function (lines 130 & 131):
+		path_images = cwd.joinpath('csci508_final', 'Images', 'TRAINING_&_TEST', 'TRAINING_&_TEST_IMAGES')
 		path_save = cwd.joinpath('csci508_final', 'Images', 'TRAINING_&_TEST')
 
-	3) Change the variable 'color' to be equal to 'True' for saving color images to X or 'False for saving black and white images to X.
+	3) Change the variable 'is_color' (line 137) to be equal to 'True' for saving color images to X or 'False for saving black and white images to X. The default value is 'True'.
 
 	4) Open up a new terminal window and change the terminal's working director to the following:
 ~/csci508-final
