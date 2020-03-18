@@ -62,7 +62,7 @@ def load_dict(path_save, dict_name):
 
 
 # Create Pickle file of input and output data
-def load_dataset(path_images, path_save, dict_name, rate=0.2):
+def load_dataset(path_images, path_save, dict_name, is_color=True):
     # Load dictionary of labels
     dictionary = load_dict(path_save, dict_name)
 
@@ -81,10 +81,13 @@ def load_dataset(path_images, path_save, dict_name, rate=0.2):
     file_count = file_count - not_class # Subtract files that are not belonging to a specific class
     
     # Define size of input and output data arrays
-    width = 512  # Standard image width
-    height = 384  # Standard image width
-    X = np.empty((0, height, width), dtype=np.uint8)  # Define standard input (X) image size
-    Y = np.empty((0, 1), dtype=np.uint8)  # Define standard output (Y) label size
+    width = 512 # Standard image width
+    height = 384 # Standard image width
+    if is_color:
+        X = np.empty((0, height, width, 3), dtype=np.uint8) # Define standard input (X) image size
+    else:
+        X = np.empty((0, height, width), dtype=np.uint8) # Define standard input (X) image size
+    Y = np.empty((0, 1), dtype=np.uint8) # Define standard output (Y) label size
 
     # Cycle through each image within each folder and create array of input and output data
     counter = 0  # Initialize counter to print how many images have been processed
@@ -96,10 +99,15 @@ def load_dataset(path_images, path_save, dict_name, rate=0.2):
         
         for class_i_image in class_i_images:
             # Cycle through each image within class_i_path and save image to X and class label to Y
-            class_i_image_path = os.path.join(class_i_path, class_i_image)  # Define path to image 'class_i_image' within class 'class_i'
-            image = cv2.imread(class_i_image_path)  # Read image
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convert to gray
-            npi = np.asarray(image).reshape(height, width)  # Reshape image to defined width and height
+            class_i_image_path = os.path.join(class_i_path, class_i_image) # Define path to image 'class_i_image' within class 'class_i'
+            image = cv2.imread(class_i_image_path) # Read image
+
+            if is_color:
+                npi = np.asarray(image).reshape(height, width, 3)  # Reshape image to defined width and height
+            else:
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convert to gray
+                npi = np.asarray(image).reshape(height, width)  # Reshape image to defined width and height
+
             X = np.append(X, [npi], axis=0)  # Append image to input array
             Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
             counter += 1 # Count total number of images saved
@@ -108,9 +116,7 @@ def load_dataset(path_images, path_save, dict_name, rate=0.2):
             output_string = "Image File {counter} of {file_count}\n"
             sys.stdout.write(output_string)
             sys.stdout.flush()
-    
-    # Split data into training and test. This can be done later too.
-    # x_train,x_test,y_train,y_test = train_test_split(X,Y,test_size = rate)
+
     return X, Y
 
 
@@ -123,11 +129,10 @@ def label_data():
     create_dict(path_images, path_save, dict_name) # Create dictionary
 
     # Create inpout (X) and output(Y) data from images within designated path
-    X, Y = load_dataset(path_images, path_save, dict_name, rate=0.2)
+    X, Y = load_dataset(path_images, path_save, dict_name)
 
     # Split data into training and test. This can be done later too.
     # x_train, x_test, y_train, y_test = loadDataset(path,dict_name,rate = 0.2)
-
     # Save X & Y data to a pickle file within designated path
     pickle_name = 'X_Y_Data.pickle'
     file_path_and_name = os.path.join(path_save, pickle_name) # Define file path & name
