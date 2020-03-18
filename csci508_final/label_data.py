@@ -113,7 +113,7 @@ def load_dataset(path_images, path_save, dict_name, is_color=True):
             counter += 1 # Count total number of images saved
 
             # Ouput to terminal number of images saved
-            output_string = "Image File {counter} of {file_count}\n"
+            output_string = "Image File {} of {}\n".format(counter, file_count)
             sys.stdout.write(output_string)
             sys.stdout.flush()
 
