@@ -25,12 +25,20 @@ The CNN model is trained using a pickle file which holds all of this data as an 
 		path_images = cwd.joinpath('csci508_final', 'Images', 'TRAINING_&_TEST', 'TRAINING_&_TEST_IMAGES')
 		path_save = cwd.joinpath('csci508_final', 'Images', 'TRAINING_&_TEST')
 
-	3) Change the variable 'is_color' (line 137) to be equal to 'True' for saving color images to X or 'False for saving black and white images to X. The default value is 'True'.
+	3) Choose whether you want the photos input into X to be color or black & white. Change the variable 'is_color' (line 137) to be equal to 'True' for saving color images to X or 'False for saving black and white images to X. The default value is 'True'.
 
-	4) Open up a new terminal window and change the terminal's working director to the following:
+	4) Choose which data augmentation methods you want applied to each image.
+		4a) For implementing a horizontal flip augmentation, change the variable 'horz' to 'False'. The default is 'True'.
+		4b) For implementing a vertical flip augmentation, change the variable 'vert' to 'False'. The default is 'True'.
+		4c) For implementing a vertical & horizontal flip augmentation, change the variable 'vert_horz' to 'False'. The default is 'True'.
+		4d) For implementing a 45 degree rotation augmentation, change the variable 'rot_45' to 'False'. The default is 'True'.
+		4e) For implementing a random noise augmentation, change the variable 'blur' to 'False'. The default is 'True'.
+		4f) For implementing a gaussian blur augmentation, change the variable 'gaussian' to 'False'. The default is 'True'.
+
+	5) Open up a new terminal window and change the terminal's working director to the following:
 ~/csci508-final
 
-	5) Within the terminal, run the labeldata.py file by entering the following:
+	6) Within the terminal, run the labeldata.py file by entering the following:
 poetry run python csci508_final/labeldata.py
 
 	The following should print onto your terminal:
@@ -38,7 +46,7 @@ poetry run python csci508_final/labeldata.py
 	For example, there are 18 images total in the TRIAL_IMAGES folder, so the last line that should appear will be:
 	"Image File 18 of 18"
 
-	6) Once the labeldata.py file has finished running, there should be a LabelDict.csv file within the folder containing the folder holding all of the images and a X_Y_Data.pickle file holding all of the data. For example, if performing this on the TRIAL_IMAGES the .csv and ,pickle files will be in the TRIAL folder. 
+	7) Once the labeldata.py file has finished running, there should be a LabelDict.csv file within the folder containing the folder holding all of the images and a X_Y_Data.pickle file holding all of the data. For example, if performing this on the TRIAL_IMAGES the .csv and ,pickle files will be in the TRIAL folder. 
         - Opening the .csv file will show each class name and its corresponding label.
         - The .pickle file holds an input variable (X), which is an array including each training image and an output variable (Y), which is an array including the label associated with the class of each image in X.
 
