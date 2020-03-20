@@ -14,7 +14,8 @@ def create_dict(path_images, path_save, dict_name):
     filelist = os.listdir(path_images)  # All files in directory
     dirlist = []
     for filename in filelist:  # loop through all the files and folders
-        if os.path.isdir(os.path.join(os.path.abspath(path_images), filename)):  # check whether the current object is a folder or not
+        # check whether the current object is a folder or not
+        if os.path.isdir(os.path.join(os.path.abspath(path_images), filename)):
             dirlist.append(filename)
 
     single = []
@@ -41,10 +42,10 @@ def create_dict(path_images, path_save, dict_name):
         counter += 1
 
     # writing to an Excel file
-    file_path_and_name = os.path.join(path_save, dict_name) # Define file path & name
+    file_path_and_name = os.path.join(path_save, dict_name)  # Define file path & name
     file = open(file_path_and_name, "w")  # Create file given path and name
     
-    file_writer = csv.writer(file) # Initialize writer for writing values to .csv file
+    file_writer = csv.writer(file)  # Initialize writer for writing values to .csv file
     for key, val in dictionary.items():
         file_writer.writerow([key, val])  # Write all class types and class numbers to file
 
@@ -61,6 +62,7 @@ def load_dict(path_save, dict_name):
             if len(row) > 0:
                 dictionary[row[0]] = int(row[1])
     return dictionary
+
 
 # Create augmented photos
 def data_augmentation(image, horz=False, vert=False, vert_horz=False, rot_45=False, noise=False, blur=False):
@@ -140,26 +142,27 @@ def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, ve
     dictionary = load_dict(path_save, dict_name)
 
     # Define variable listing all possible classes
-    filelist = os.listdir(path_images) # All files in directory
-    class_list = [] # Initialize list of all classes
-    not_class = 0 # Initialize number of files within directory not defined as a class
-    for filename in filelist: # loop through all the files and folders
-        if os.path.isdir(os.path.join(os.path.abspath(path_images), filename)): # check whether the current object is a folder or not
-            class_list.append(filename) # Append class to list of classes
+    filelist = os.listdir(path_images)  # All files in directory
+    class_list = []  # Initialize list of all classes
+    not_class = 0  # Initialize number of files within directory not defined as a class
+    for filename in filelist:  # loop through all the files and folders
+        # check whether the current object is a folder or not
+        if os.path.isdir(os.path.join(os.path.abspath(path_images), filename)):
+            class_list.append(filename)  # Append class to list of classes
         else:
             not_class += 1
 
     # Count number of images within directory
-    file_count = sum([len(files) for r, d, files in os.walk(path_images)]) # Count number of files in images location
-    file_count = file_count - not_class # Subtract files that are not belonging to a specific class
+    file_count = sum([len(files) for r, d, files in os.walk(path_images)])  # Count number of files in images location
+    file_count = file_count - not_class  # Subtract files that are not belonging to a specific class
     
     # Define size of input and output data arrays
     width, height = max_image_size(path_images, path_save, class_list) # Standard image width & height
     if is_color:
-        X = np.empty((0, height, width, 3), dtype=np.uint8) # Define standard input (X) image size
+        X = np.empty((0, height, width, 3), dtype=np.uint8)  # Define standard input (X) image size
     else:
-        X = np.empty((0, height, width), dtype=np.uint8) # Define standard input (X) image size
-    Y = np.empty((0, 1), dtype=np.uint8) # Define standard output (Y) label size
+        X = np.empty((0, height, width), dtype=np.uint8)  # Define standard input (X) image size
+    Y = np.empty((0, 1), dtype=np.uint8)  # Define standard output (Y) label size
 
     # Cycle through each image within each folder and create array of input and output data
     counter = 0  # Initialize counter to print how many images have been processed
@@ -168,11 +171,12 @@ def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, ve
         class_i_path = os.path.join(path_images, class_i)  # Define folder path of all images within class
         class_i_images = os.listdir(class_i_path)  # Create array of all images names within folder
         class_i = class_i.lower()  # Ensure all file names are lowercase for when finding label within .csv file
-        
+
+        # Cycle through each image within class_i_path and save image to X and class label to Y
         for class_i_image in class_i_images:
-            # Cycle through each image within class_i_path and save image to X and class label to Y
-            class_i_image_path = os.path.join(class_i_path, class_i_image) # Define path to image 'class_i_image' within class 'class_i'
-            image = cv2.imread(class_i_image_path) # Read image
+            # Define path to image 'class_i_image' within class 'class_i'
+            class_i_image_path = os.path.join(class_i_path, class_i_image)
+            image = cv2.imread(class_i_image_path)
 
             if not is_color:
                 image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convert to gray
@@ -182,46 +186,45 @@ def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, ve
             Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             if horz:
-                img_flip_horz = data_augmentation(image_reshape, horz = True)
+                img_flip_horz = data_augmentation(image_reshape, horz=True)
                 X = np.append(X, [img_flip_horz], axis=0)  # Append image to input array
                 Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             if vert:
-                img_flip_vert = data_augmentation(image_reshape, vert = True)
+                img_flip_vert = data_augmentation(image_reshape, vert=True)
                 X = np.append(X, [img_flip_vert], axis=0)  # Append image to input array
                 Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             if vert_horz:
-                img_flip_vert_horz = data_augmentation(image_reshape, vert_horz = True)
+                img_flip_vert_horz = data_augmentation(image_reshape, vert_horz=True)
                 X = np.append(X, [img_flip_vert_horz], axis=0)  # Append image to input array
                 Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             if rot_45:
-                img_rot_45 = data_augmentation(image_reshape, rot_45 = True)
+                img_rot_45 = data_augmentation(image_reshape, rot_45=True)
                 X = np.append(X, [img_rot_45], axis=0)  # Append image to input array
                 Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             if noise:
-                image_noise = data_augmentation(image_reshape, noise = True)
+                image_noise = data_augmentation(image_reshape, noise=True)
 
                 # image_noise is originally a float64 data type, so convert to a uint8 to match others
-                image_noise = 255 * image_noise / np.amax(image_noise) # Current values are between 0 and 1. Change to between 0 and 255
-                image_noise = image_noise.astype(np.uint8) # Convert to uint8 data type
+                # Current values are between 0 and 1. Change to between 0 and 255
+                image_noise = 255 * image_noise / np.amax(image_noise)
+                image_noise = image_noise.astype(np.uint8)  # Convert to uint8 data type
 
                 X = np.append(X, [image_noise], axis=0)  # Append image to input array
                 Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             if blur:
-                image_blur = data_augmentation(image_reshape, blur = True)
+                image_blur = data_augmentation(image_reshape, blur=True)
                 X = np.append(X, [image_blur], axis=0)  # Append image to input array
                 Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
-            counter += 1 # Count total number of images saved
+            counter += 1  # Count total number of images saved
 
-            # Ouput to terminal number of images saved
-            output_string = "Image File {} of {}\n".format(counter, file_count)
-            sys.stdout.write(output_string)
-            sys.stdout.flush()
+            # Output to terminal number of images saved
+            print("Image File {} of {} pickled".format(counter, file_count))
 
     return X, Y
 
@@ -229,16 +232,13 @@ def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, ve
 def label_data():
     # Create dictionary of labels and their corresponding labels
     cwd = pathlib.Path.cwd()
-    path_images = cwd.joinpath('csci508_final', 'Images', 'TRIAL', 'TRIAL_IMAGES_2') # Path to files
-    path_save = cwd.joinpath('csci508_final', 'Images', 'TRIAL') # Path for where to save files
-    dict_name = 'LabelDict.csv' # File that saves classes and their corresponding labels
-    create_dict(path_images, path_save, dict_name) # Create dictionary
+    path_images = cwd.joinpath('csci508_final', 'Images', 'TRIAL', 'TRIAL_IMAGES')  # Path to files
+    path_save = cwd.joinpath('csci508_final', 'Images', 'TRIAL')  # Path for where to save files
+    dict_name = 'LabelDict.csv'  # File that saves classes and their corresponding labels
+    create_dict(path_images, path_save, dict_name)  # Create dictionary
 
-    # Create inpout (X) and output(Y) data from images within designated path
+    # Create input (X) and output(Y) data from images within designated path
     X, Y = load_dataset(path_images, path_save, dict_name)
-
-    # Split data into training and test. This can be done later too.
-    # x_train, x_test, y_train, y_test = loadDataset(path,dict_name,rate = 0.2)
 
     # Save X & Y data to a pickle file within designated path
     pickle_name = 'X_Y_Data.pickle'
