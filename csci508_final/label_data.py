@@ -6,6 +6,7 @@ import cv2
 import pickle
 import pathlib
 from skimage.util import random_noise
+from PIL import Image
 
 
 # Create dictionary of Labels
@@ -95,6 +96,44 @@ def data_augmentation(image, horz=False, vert=False, vert_horz=False, rot_45=Fal
         image_blur = cv2.GaussianBlur(image, (11,11),0)
         return image_blur
 
+def max_image_size(path_images, path_save, class_list):
+    # Cycle through all images and find the largest height * width
+    height_max = 0  # Initialize maximum photo height
+    width_max = 0  # Initialize maximum photo width
+    for class_i in class_list:
+        # Cycle through each folder within images location
+        class_i_path = os.path.join(path_images, class_i)  # Define folder path of all images within class
+        class_i_images = os.listdir(class_i_path)  # Create array of all images names within folder
+        for class_i_image in class_i_images:
+            # Cycle through each image within images location for specific class
+            class_i_image_path = os.path.join(class_i_path, class_i_image)  # Define path to image 'class_i_image' within class 'class_i'
+            image = Image.open(class_i_image_path)  # Get image size without reading image into memory
+            [width, height] = image.size
+            if height_max < height:
+                height_max = height
+            if width_max < width:
+                width_max = width
+
+    return width_max, height_max
+
+def add_padding(image, width_des, height_des):
+    height_img = image.shape[0]
+    width_img = image.shape[1]
+
+    left = round((width_des - width_img) / 2)
+    right = left
+    if 2*left + width_img < width_des:
+        left = left + 1
+    
+    top = round((height_des - height_img) / 2)
+    bottom = top
+    if 2*top + height_img < height_des:
+        top = top + 1
+
+    # Using cv2.copyMakeBorder() method 
+    image = cv2.copyMakeBorder(image, top, bottom, left, right, cv2.BORDER_CONSTANT)
+    return image
+
 # Create Pickle file of input and output data
 def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, vert=True, vert_horz=True, rot_45=True, noise=True, blur=True):
     # Load dictionary of labels
@@ -115,8 +154,7 @@ def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, ve
     file_count = file_count - not_class # Subtract files that are not belonging to a specific class
     
     # Define size of input and output data arrays
-    width = 512 # Standard image width
-    height = 384 # Standard image width
+    width, height = max_image_size(path_images, path_save, class_list) # Standard image width & height
     if is_color:
         X = np.empty((0, height, width, 3), dtype=np.uint8) # Define standard input (X) image size
     else:
@@ -136,12 +174,10 @@ def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, ve
             class_i_image_path = os.path.join(class_i_path, class_i_image) # Define path to image 'class_i_image' within class 'class_i'
             image = cv2.imread(class_i_image_path) # Read image
 
-            if is_color:
-                image_reshape = np.asarray(image).reshape(height, width, 3)  # Reshape image to defined width and height
-            else:
-                image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convert to gray
-                image_reshape = np.asarray(image_gray).reshape(height, width)  # Reshape image to defined width and height
+            if not is_color:
+                image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)  # Convert to gray
 
+            image_reshape = add_padding(image, width, height) # Reshape image to defined width and height
             X = np.append(X, [image_reshape], axis=0)  # Append image to input array
             Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
@@ -193,7 +229,7 @@ def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, ve
 def label_data():
     # Create dictionary of labels and their corresponding labels
     cwd = pathlib.Path.cwd()
-    path_images = cwd.joinpath('csci508_final', 'Images', 'TRIAL', 'TRIAL_IMAGES') # Path to files
+    path_images = cwd.joinpath('csci508_final', 'Images', 'TRIAL', 'TRIAL_IMAGES_2') # Path to files
     path_save = cwd.joinpath('csci508_final', 'Images', 'TRIAL') # Path for where to save files
     dict_name = 'LabelDict.csv' # File that saves classes and their corresponding labels
     create_dict(path_images, path_save, dict_name) # Create dictionary
