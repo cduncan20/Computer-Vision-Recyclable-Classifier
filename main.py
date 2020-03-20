@@ -10,7 +10,7 @@ def main():
     args = get_args()
 
     if args.augment_data:
-        print("Data augmentation forthcoming")
+        csci.data_augmentation.interface()
 
     if args.label_data:
         csci.label_data.label_data()
