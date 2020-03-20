@@ -9,10 +9,13 @@ import csci508_final as csci
 def main():
     args = get_args()
 
+    if args.augment_data:
+        print("Data augmentation forthcoming")
+
     if args.label_data:
         csci.label_data.label_data()
 
-    if args.pickle_test:
+    if args.dry_run:
         csci.pickle_file_test.run_test()
 
     if args.train:
@@ -30,21 +33,20 @@ def get_args():
 
     # The command line arguments now available
     parser.add_argument('-a',
-                        '--augment_data',
+                        '--augment-data',
                         action='store_true',
                         default=False,
                         help='Provides automated data augmentation to data in the TEST set such as horizontal and '
                              'vertical reflection')
     parser.add_argument('-l',
-                        '--label_data',
+                        '--label-data',
                         action='store_true',
                         default=False,
                         help='Generates a pickle file from data in the Images directory')
-    parser.add_argument('-p',
-                        '--pickle_test',
+    parser.add_argument('--dry-run',
                         action='store_true',
                         default=False,
-                        help='Runs a test of the pickle file from the TRIAL set')
+                        help='Performs a dry run using only the data in the TRIAL directory')
     parser.add_argument('--train',
                         action="store_true",
                         default=False,
