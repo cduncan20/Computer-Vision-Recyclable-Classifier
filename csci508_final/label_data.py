@@ -189,9 +189,7 @@ def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, ve
             counter += 1  # Count total number of images saved
 
             # Output to terminal number of images saved
-            output_string = "Image File {} of {}\n".format(counter, file_count)
-            sys.stdout.write(output_string)
-            sys.stdout.flush()
+            print("Image File {} of {} pickled".format(counter, file_count))
 
     return X, Y
 
