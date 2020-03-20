@@ -98,7 +98,7 @@ def data_augmentation(image, horz=False, vert=False, vert_horz=False, rot_45=Fal
         image_blur = cv2.GaussianBlur(image, (11,11),0)
         return image_blur
 
-def max_image_size(path_images, path_save, class_list):
+def get_max_image_size(path_images, path_save, class_list):
     # Cycle through all images and find the largest height * width
     height_max = 0  # Initialize maximum photo height
     width_max = 0  # Initialize maximum photo width
@@ -122,18 +122,18 @@ def add_padding(image, width_des, height_des):
     height_img = image.shape[0]
     width_img = image.shape[1]
 
-    left = round((width_des - width_img) / 2)
-    right = left
-    if 2*left + width_img < width_des:
-        left = left + 1
+    left_padding = round((width_des - width_img) / 2)
+    right_padding = left_padding
+    if 2*left_padding + width_img < width_des:
+        left_padding = left_padding + 1
     
-    top = round((height_des - height_img) / 2)
-    bottom = top
-    if 2*top + height_img < height_des:
-        top = top + 1
+    top_padding = round((height_des - height_img) / 2)
+    bottom_padding = top_padding
+    if 2*top_padding + height_img < height_des:
+        top_padding = top_padding + 1
 
     # Using cv2.copyMakeBorder() method 
-    image = cv2.copyMakeBorder(image, top, bottom, left, right, cv2.BORDER_CONSTANT)
+    image = cv2.copyMakeBorder(image, top_padding, bottom_padding, left_padding, right_padding, cv2.BORDER_CONSTANT)
     return image
 
 # Create Pickle file of input and output data
@@ -157,7 +157,7 @@ def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, ve
     file_count = file_count - not_class  # Subtract files that are not belonging to a specific class
     
     # Define size of input and output data arrays
-    width, height = max_image_size(path_images, path_save, class_list) # Standard image width & height
+    width, height = get_max_image_size(path_images, path_save, class_list) # Standard image width & height
     if is_color:
         X = np.empty((0, height, width, 3), dtype=np.uint8)  # Define standard input (X) image size
     else:
