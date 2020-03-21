@@ -15,7 +15,7 @@ def main():
         augmentations = csci.data_augmentation.initialize_augmentation_dictionary()
 
     if args.label_data:
-        csci.label_data.label_data()
+        csci.label_data.label_data(augmentations)
 
     if args.dry_run:
         csci.pickle_file_test.run_test()

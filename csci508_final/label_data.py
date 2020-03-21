@@ -99,7 +99,7 @@ def data_augmentation(image, horz=False, vert=False, vert_horz=False, rot_45=Fal
 
 
 # Create Pickle file of input and output data
-def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, vert=True, vert_horz=True, rot_45=True, noise=True, blur=True):
+def load_dataset(path_images, path_save, dict_name, horz, vert, vert_horz, rot_45, noise, blur, is_color=True):
     # Load dictionary of labels
     dictionary = load_dict(path_save, dict_name)
 
@@ -151,27 +151,27 @@ def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, ve
             Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             if horz:
-                img_flip_horz = data_augmentation(image_reshape, horz=True)
+                img_flip_horz = data_augmentation(image_reshape, horz=horz)
                 X = np.append(X, [img_flip_horz], axis=0)  # Append image to input array
                 Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             if vert:
-                img_flip_vert = data_augmentation(image_reshape, vert=True)
+                img_flip_vert = data_augmentation(image_reshape, vert=vert)
                 X = np.append(X, [img_flip_vert], axis=0)  # Append image to input array
                 Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             if vert_horz:
-                img_flip_vert_horz = data_augmentation(image_reshape, vert_horz=True)
+                img_flip_vert_horz = data_augmentation(image_reshape, vert_horz=vert_horz)
                 X = np.append(X, [img_flip_vert_horz], axis=0)  # Append image to input array
                 Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             if rot_45:
-                img_rot_45 = data_augmentation(image_reshape, rot_45=True)
+                img_rot_45 = data_augmentation(image_reshape, rot_45=rot_45)
                 X = np.append(X, [img_rot_45], axis=0)  # Append image to input array
                 Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             if noise:
-                image_noise = data_augmentation(image_reshape, noise=True)
+                image_noise = data_augmentation(image_reshape, noise=noise)
 
                 # image_noise is originally a float64 data type, so convert to a uint8 to match others
                 # Current values are between 0 and 1. Change to between 0 and 255
@@ -182,19 +182,19 @@ def load_dataset(path_images, path_save, dict_name, is_color=True, horz=True, ve
                 Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             if blur:
-                image_blur = data_augmentation(image_reshape, blur=True)
+                image_blur = data_augmentation(image_reshape, blur=blur)
                 X = np.append(X, [image_blur], axis=0)  # Append image to input array
                 Y = np.append(Y, dictionary[class_i])  # Append label of image to output array
 
             counter += 1  # Count total number of images saved
 
             # Output to terminal number of images saved
-            print("Image File {} of {} pickled".format(counter, file_count))
+            print("Base Image File {} of {} and transformations added to data set".format(counter, file_count))
 
     return X, Y
 
 
-def label_data():
+def label_data(data_augmentation_dictionary):
     # Create dictionary of labels and their corresponding labels
     cwd = pathlib.Path.cwd()
     path_images = cwd.joinpath('csci508_final', 'Images', 'TRIAL', 'TRIAL_IMAGES')  # Path to files
@@ -202,8 +202,16 @@ def label_data():
     dict_name = 'LabelDict.csv'  # File that saves classes and their corresponding labels
     create_dict(path_images, path_save, dict_name)  # Create dictionary
 
+    # Handle data augmentation flagging logic provided by data_augmentation_dictionary
+    horiz = data_augmentation_dictionary['horizontal']
+    vert = data_augmentation_dictionary['vertical']
+    horiz_vert = data_augmentation_dictionary['horizontal-vertical']
+    rot45 = data_augmentation_dictionary['rot45']
+    noise = data_augmentation_dictionary['noise']
+    blur = data_augmentation_dictionary['blur']
+
     # Create input (X) and output(Y) data from images within designated path
-    X, Y = load_dataset(path_images, path_save, dict_name)
+    X, Y = load_dataset(path_images, path_save, dict_name, horiz, vert, horiz_vert, rot45, noise, blur)
 
     # Save X & Y data to a pickle file within designated path
     pickle_name = 'X_Y_Data.pickle'
