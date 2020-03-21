@@ -10,7 +10,9 @@ def main():
     args = get_args()
 
     if args.augment_data:
-        csci.data_augmentation.interface()
+        augmentations = csci.data_augmentation.interface()
+    else:
+        augmentations = csci.data_augmentation.initialize_augmentation_dictionary()
 
     if args.label_data:
         csci.label_data.label_data()
