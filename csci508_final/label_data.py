@@ -232,8 +232,8 @@ def load_dataset(path_images, path_save, dict_name, horz, vert, vert_horz, rot_4
 def label_data(data_augmentation_dictionary):
     # Create dictionary of labels and their corresponding labels
     cwd = pathlib.Path.cwd()
-    path_images = cwd.joinpath('csci508_final', 'Images', 'TRIAL', 'TRIAL_IMAGES')  # Path to files
-    path_save = cwd.joinpath('csci508_final', 'Images', 'TRIAL')  # Path for where to save files
+    path_images = cwd.joinpath('csci508_final', 'Images', 'TRAINING_&_TEST', 'TRAINING_&_TEST_IMAGES')  # Path to files
+    path_save = cwd.joinpath('csci508_final', 'Images', 'TRAINING_&_TEST')  # Path for where to save files
     dict_name = 'LabelDict.csv'  # File that saves classes and their corresponding labels
     create_dict(path_images, path_save, dict_name)  # Create dictionary
 
