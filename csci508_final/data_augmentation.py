@@ -18,18 +18,25 @@ def interface():
     for augmentation in aug_list:
         if augmentation == '1':
             aug_dict['horizontal'] = True
+            continue
         if augmentation == '2':
             aug_dict['vertical'] = True
+            continue
         if augmentation == '3':
             aug_dict['horizontal-vertical'] = True
+            continue
         if augmentation == '4':
             aug_dict['rot45'] = True
+            continue
         if augmentation == '5':
             aug_dict['noise'] = True
+            continue
         if augmentation == '6':
             aug_dict['blur'] = True
+            continue
         if augmentation == '7':
             aug_dict = {value: True for value in aug_dict}
+            continue
         if augmentation == 'n':
             aug_dict = {value: False for value in aug_dict}
         else:
