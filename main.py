@@ -10,10 +10,12 @@ def main():
     args = get_args()
 
     if args.augment_data:
-        print("Data augmentation forthcoming")
+        augmentations = csci.data_augmentation.interface()
+    else:
+        augmentations = csci.data_augmentation.initialize_augmentation_dictionary()
 
     if args.label_data:
-        csci.label_data.label_data()
+        csci.label_data.label_data(augmentations)
 
     if args.dry_run:
         csci.pickle_file_test.run_test()
