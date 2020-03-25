@@ -23,7 +23,7 @@ def create_dict(path_images, path_save, dict_name):
     multiple = []
 
     for item in dirlist:
-        item = item.lower()  # make everything lowercase
+        item = item.lower()  # make everything lowercaseLoading Data Files
         if len(item) == 1:
             single.append(item)
         else:
@@ -79,20 +79,33 @@ def get_class_list(path_images):
 
 
 # Splits indices for a folder into train, validation, and test indices with random sampling
-def split_data(path_images, seed1, seed2):
+def split_data(path_images, train_ratio, valid_ratio, test_ratio):
+    # Verify Training, Validation, and Test ratios are not negative
+    if train_ratio < 0.0:
+        sys.exit("Train Data Ratio is negative. Change to value between 0.0 and 1.0")
+    if valid_ratio < 0.0:
+        sys.exit("Validation Data Ratio is negative. Change to value between 0.0 and 1.0")
+    if test_ratio < 0.0:
+        sys.exit("Test Data Ratio is negative. Change to value between 0.0 and 1.0")
+
+    # Verify Training, Validation, and Test ratios add to 1.0
+    if train_ratio + valid_ratio + test_ratio != 1.0:
+        sys.exit("Train, Validation, & Test Data Ratios do not add to equal 1.0")
+
     image_quantity = len(os.listdir(path_images))  # Total number of images in path_images
     all_image_indices = list(range(1, image_quantity + 1))  # List of all image indices from 1 to last image
 
     # Get indices of Training Images
-    random.seed(seed1)
-    train_indices = random.sample(list(range(1, image_quantity + 1)), int(.6 * image_quantity))
+    random.seed(1)
+    train_indices = random.sample(list(range(1, image_quantity + 1)), int(train_ratio * image_quantity))
 
     # Get indices of remaining images for Validation & Test Images
     remaining_images = list(set(all_image_indices) - set(train_indices))
+    valid_ratio_remain = image_quantity*valid_ratio/len(remaining_images)
 
     # Get indices of Validation Images
-    random.seed(seed2)
-    valid_indices = random.sample(remaining_images, int(.5 * len(remaining_images)))
+    random.seed(1)
+    valid_indices = random.sample(remaining_images, int(valid_ratio_remain * len(remaining_images)))
 
     # Get indices of Test Images
     test_indices = list(set(remaining_images) - set(valid_indices))
@@ -107,7 +120,7 @@ def get_image_names(class_type, indices):
 
 
 # Gets the names of the images for Training, Validation, and Testing
-def train_valid_test_image_names(path_images, seed1, seed2, class_list):
+def train_valid_test_image_names(path_images, class_list, train_ratio, valid_ratio, test_ratio):
     # Initiallize arrays holding image files names for Training, Validation, and Testing
     train_names = np.empty((0, 1))
     valid_names = np.empty((0, 1))
@@ -116,7 +129,7 @@ def train_valid_test_image_names(path_images, seed1, seed2, class_list):
     # Append image names to arrays
     for class_i in class_list:
         class_i_images = os.path.join(path_images, class_i)  # Path of images within class i
-        train_ind, valid_ind, test_ind = split_data(class_i_images, 1, 1)  # Indices of images for Train, Valid, & Test
+        train_ind, valid_ind, test_ind = split_data(class_i_images, train_ratio, valid_ratio, test_ratio)  # Indices of images for Train, Valid, & Test
         train_names = np.append(train_names, np.asarray(get_image_names(class_i, train_ind)))
         valid_names = np.append(valid_names, np.asarray(get_image_names(class_i, valid_ind)))
         test_names = np.append(test_names, np.asarray(get_image_names(class_i, test_ind)))
@@ -256,27 +269,23 @@ def load_dataset(path_images, path_save, dict_name, class_list, image_names, hor
 
                 aug_complete_count = 0
                 if horz:
-                    img_flip_horz = data_augmentation(image_reshape, horz=True)
                     aug_complete_count += 1
-                    X[img_counter + aug_complete_count] = img_flip_horz  # Append image to input array
+                    X[img_counter + aug_complete_count] = data_augmentation(image_reshape, horz=True)  # Append image to input array
                     Y[img_counter + aug_complete_count] = dictionary[class_i]  # Append label of image to output array
 
                 if vert:
-                    img_flip_vert = data_augmentation(image_reshape, vert=True)
                     aug_complete_count += 1
-                    X[img_counter + aug_complete_count] = img_flip_vert  # Append image to input array
+                    X[img_counter + aug_complete_count] = data_augmentation(image_reshape, vert=True)  # Append image to input array
                     Y[img_counter + aug_complete_count] = dictionary[class_i]  # Append label of image to output array
 
                 if vert_horz:
-                    img_flip_vert_horz = data_augmentation(image_reshape, vert_horz=True)
                     aug_complete_count += 1
-                    X[img_counter + aug_complete_count] = img_flip_vert_horz  # Append image to input array
+                    X[img_counter + aug_complete_count] = data_augmentation(image_reshape, vert_horz=True)  # Append image to input array
                     Y[img_counter + aug_complete_count] = dictionary[class_i]  # Append label of image to output array
 
                 if rot_45:
-                    img_rot_45 = data_augmentation(image_reshape, rot_45=True)
                     aug_complete_count += 1
-                    X[img_counter + aug_complete_count] = img_rot_45  # Append image to input array
+                    X[img_counter + aug_complete_count] = img_rot_45 = data_augmentation(image_reshape, rot_45=True)  # Append image to input array
                     Y[img_counter + aug_complete_count] = dictionary[class_i]  # Append label of image to output array
 
                 if noise:
@@ -291,9 +300,8 @@ def load_dataset(path_images, path_save, dict_name, class_list, image_names, hor
                     Y[img_counter + aug_complete_count] = dictionary[class_i]  # Append label of image to output array
 
                 if blur:
-                    image_blur = data_augmentation(image_reshape, blur=True)
                     aug_complete_count += 1
-                    X[img_counter + aug_complete_count] = image_blur  # Append image to input array
+                    X[img_counter + aug_complete_count] = data_augmentation(image_reshape, blur=True)  # Append image to input array
                     Y[img_counter + aug_complete_count] = dictionary[class_i]  # Append label of image to output array
 
                 img_counter += aug_complete_count+1  # Count total number of images saved
@@ -310,7 +318,7 @@ def load_dataset(path_images, path_save, dict_name, class_list, image_names, hor
     return X, Y
 
 
-def label_data(data_augmentation_dictionary):
+def label_data(data_augmentation_dictionary, train_ratio, valid_ratio, test_ratio):
     # Create dictionary of labels and their corresponding labels
     cwd = pathlib.Path.cwd()
     # path_images = cwd.joinpath('csci508_final', 'Images', 'TRIAL', 'TRIAL_IMAGES')  # Path to files
@@ -332,7 +340,7 @@ def label_data(data_augmentation_dictionary):
     class_list = get_class_list(path_images)
 
     # Obtain image names for Training, Validation, & Testing
-    train_names, valid_names, test_names = train_valid_test_image_names(path_images, 1, 1, class_list)
+    train_names, valid_names, test_names = train_valid_test_image_names(path_images, class_list, train_ratio, valid_ratio, test_ratio)
     for i in range(1, 4):
         image_names = []
         file_name_X = []

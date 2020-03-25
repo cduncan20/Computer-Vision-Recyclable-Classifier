@@ -9,13 +9,16 @@ import csci508_final as csci
 def main():
     args = get_args()
 
+    if args.split_data:
+        train_ratio, valid_ratio, test_ratio = csci.data_split_ratios.interface()
+
     if args.augment_data:
         augmentations = csci.data_augmentation.interface()
     else:
         augmentations = csci.data_augmentation.initialize_augmentation_dictionary()
 
     if args.label_data:
-        csci.label_data.label_data(augmentations)
+        csci.label_data.label_data(augmentations, train_ratio, valid_ratio, test_ratio)
 
     if args.dry_run:
         csci.pickle_file_test.run_test()
@@ -34,6 +37,11 @@ def get_args():
     parser = argparse.ArgumentParser()
 
     # The command line arguments now available
+    parser.add_argument('-s',
+                        '--split-data',
+                        action='store_true',
+                        default=False,
+                        help='Allows user to choose how to split Training, Validation, & Test data')
     parser.add_argument('-a',
                         '--augment-data',
                         action='store_true',
