@@ -285,7 +285,7 @@ def load_dataset(path_images, path_save, dict_name, class_list, image_names, hor
 
                 if rot_45:
                     aug_complete_count += 1
-                    X[img_counter + aug_complete_count] = img_rot_45 = data_augmentation(image_reshape, rot_45=True)  # Append image to input array
+                    X[img_counter + aug_complete_count] = data_augmentation(image_reshape, rot_45=True)  # Append image to input array
                     Y[img_counter + aug_complete_count] = dictionary[class_i]  # Append label of image to output array
 
                 if noise:
