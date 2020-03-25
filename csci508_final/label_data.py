@@ -23,7 +23,7 @@ def create_dict(path_images, path_save, dict_name):
     multiple = []
 
     for item in dirlist:
-        item = item.lower()  # make everything lowercaseLoading Data Files
+        item = item.lower()  # make everything lowercase
         if len(item) == 1:
             single.append(item)
         else:
