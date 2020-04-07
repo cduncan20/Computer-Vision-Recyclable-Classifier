@@ -20,9 +20,6 @@ def main():
     if args.label_data:
         csci.label_data.label_data(augmentations, train_ratio, valid_ratio, test_ratio)
 
-    if args.dry_run:
-        csci.pickle_file_test.run_test()
-
     if args.train:
         print("This is where training will go")
 
@@ -53,10 +50,6 @@ def get_args():
                         action='store_true',
                         default=False,
                         help='Generates a pickle file from data in the Images directory')
-    parser.add_argument('--dry-run',
-                        action='store_true',
-                        default=False,
-                        help='Performs a dry run using only the data in the TRIAL directory')
     parser.add_argument('--train',
                         action="store_true",
                         default=False,
