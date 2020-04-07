@@ -17,9 +17,6 @@ def main():
     else:
         augmentations = csci.data_augmentation.initialize_augmentation_dictionary()
 
-    if args.label_data:
-        csci.label_data.label_data(augmentations, train_ratio, valid_ratio, test_ratio)
-
     if args.train:
         print("This is where training will go")
 
@@ -34,22 +31,17 @@ def get_args():
     parser = argparse.ArgumentParser()
 
     # The command line arguments now available
-    parser.add_argument('-s',
-                        '--split-data',
-                        action='store_true',
-                        default=False,
-                        help='Allows user to choose how to split Training, Validation, & Test data')
     parser.add_argument('-a',
                         '--augment-data',
                         action='store_true',
                         default=False,
                         help='Provides automated data augmentation to data in the TEST set such as horizontal and '
                              'vertical reflection')
-    parser.add_argument('-l',
-                        '--label-data',
+    parser.add_argument('-s',
+                        '--split-data',
                         action='store_true',
                         default=False,
-                        help='Generates a pickle file from data in the Images directory')
+                        help='Allows user to choose how to split Training, Validation, & Test data')
     parser.add_argument('--train',
                         action="store_true",
                         default=False,
