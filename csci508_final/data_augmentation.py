@@ -1,4 +1,3 @@
-
 def interface():
     print("Data Augmentation Manager")
     print("")
