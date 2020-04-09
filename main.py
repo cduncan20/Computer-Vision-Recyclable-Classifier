@@ -11,6 +11,8 @@ def main():
 
     if args.split_data:
         train_ratio, valid_ratio, test_ratio = csci.data_split_ratios.interface()
+    else:
+        train_ratio, valid_ratio, test_ratio = csci.data_split_ratios.initialize_with_default_values()
 
     if args.augment_data:
         augmentations = csci.data_augmentation.interface()
