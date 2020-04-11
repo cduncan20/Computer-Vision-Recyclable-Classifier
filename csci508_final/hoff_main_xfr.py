@@ -3,8 +3,6 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import torchvision
-from torchvision import datasets, models, transforms
-import matplotlib.pyplot as plt
 import numpy as np
 import time
 
@@ -65,31 +63,6 @@ def main():
     show_example_results(test_loader, model)
 
     print("All done!")
-
-
-def visualize_training_data(loader):
-    # get some random training images
-    dataiter = iter(loader)
-    images, labels = dataiter.next()
-
-    # print class labels
-    L = labels.numpy()
-    out_string = ""
-    for i in range(len(L)):
-        out_string += "%s " % class_names[L[i]]
-    print(out_string)
-
-    # show images
-    imshow(torchvision.utils.make_grid(images))
-
-def imshow(inp, title=None):
-    inp = inp.numpy().transpose((1, 2, 0))
-    mean = np.array([0.5, 0.5, 0.5])
-    std = np.array([0.5, 0.5, 0.5])
-    inp = std * inp + mean
-    inp = np.clip(inp, 0, 1)
-    plt.imshow(inp)
-    plt.show()
 
 
 def train_model(model, train_loader, val_loader, epochs=1):
