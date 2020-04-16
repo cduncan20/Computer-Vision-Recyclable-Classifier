@@ -31,9 +31,9 @@ def select_new_values():
             test_ratio = 1.0 - (train_ratio + valid_ratio)
 
             print("You have selected to split data as follows:")
-            print("{}% Training, {}% Validation, {}% Testing.".format(train_ratio * 100,
-                                                                      valid_ratio * 100,
-                                                                      test_ratio * 100))
+            print("{}% Training, {}% Validation, {}% Testing.".format(round(train_ratio, 2) * 100,
+                                                                      round(valid_ratio, 2) * 100,
+                                                                      round(test_ratio, 2) * 100))
             confirmation = input("Is this correct? (y/n): ")
             while confirmation not in 'yn':
                 confirmation = input("Invalid argument provided. Please select a valid option. Are the above ratios "
