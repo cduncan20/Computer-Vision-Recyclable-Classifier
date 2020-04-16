@@ -18,9 +18,18 @@ def main():
         augmentations = csci.data_augmentation.interface()
     else:
         augmentations = csci.data_augmentation.initialize_augmentation_dictionary()
+        print("")
+        print("No transforms will be applied to training data by default.")
+        print("")
+
+    if args.epoch_qty:
+        epoch_qty = csci.epoch_quantity.interface()
+    else:
+        epoch_qty = csci.epoch_quantity.initialize_with_default_values()
 
     if args.train:
-        print("This is where training will go")
+        model_dict = csci.model_selection.interface()
+        csci.train_test_model.main(augmentations, model_dict, train_ratio, valid_ratio, test_ratio, epoch_qty)
 
     if args.test:
         print("This is where testing will go")
@@ -37,13 +46,18 @@ def get_args():
                         '--augment-data',
                         action='store_true',
                         default=False,
-                        help='Provides automated data augmentation to data in the TEST set such as horizontal and '
-                             'vertical reflection')
+                        help='Allows user to choose augmentations (flip horizontally, flip vertically, rotate, etc.)'
+                             'performed on training data')
     parser.add_argument('-s',
                         '--split-data',
                         action='store_true',
                         default=False,
                         help='Allows user to choose how to split Training, Validation, & Test data')
+    parser.add_argument('-e',
+                        '--epoch-qty',
+                        action='store_true',
+                        default=False,
+                        help='Allows user to choose the number of epochs for training the selected model')
     parser.add_argument('--train',
                         action="store_true",
                         default=False,

@@ -1,0 +1,27 @@
+Model file name:,resnet50_model
+ 
+Selected Transforms:
+1) Random Horizontal Flip:,True
+2) Random Vertical Flip:,True
+3) Random +/-30 Degree Rotation,True
+ 
+Training Ratio:,0.6
+Validation Ratio:,0.2
+Testing Ratio:,0.2
+ 
+Epoch Quantity:,10
+ 
+Confusion Matrix
+cardboard,glass,metal,paper,plastic,trash
+0,0,0,0,0,0
+0,0,0,0,0,0
+0,0,0,0,0,1
+1,0,0,0,0,0
+0,0,0,1,0,0
+0,0,0,0,0,0
+ 
+Class Accuracy
+cardboard,glass,metal,paper,plastic,trash
+nan,nan,0.0,0.0,0.0,nan
+ 
+Overall Accuracy:,0.0

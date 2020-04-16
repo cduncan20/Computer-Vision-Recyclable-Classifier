@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import sys
+import pathlib
 from random import random
 from skimage.util import random_noise
 
@@ -91,35 +92,6 @@ def transform_and_split_data(transform_dict, data_directory_path, val_ratio, tes
     return train_loader, val_loader, test_loader
 
 
-def visualize_training_data(loader, class_names):
-    # get some random training images
-    dataiter = iter(loader)
-    images, labels = dataiter.next()
-
-    # print class labels
-    L = labels.numpy()
-    out_string = ""
-    for i in range(len(L)):
-        out_string += "%s " % class_names[L[i]]
-
-    print("")
-    print("Classes of Images Shown:", out_string)
-
-    # show images
-    imshow(torchvision.utils.make_grid(images))
-
-
-# Show examples of images in loader
-def imshow(inp, title=None):
-    inp = inp.numpy().transpose((1, 2, 0))
-    mean = np.array([0.5, 0.5, 0.5])
-    std = np.array([0.5, 0.5, 0.5])
-    inp = std * inp + mean
-    inp = np.clip(inp, 0, 1)
-    plt.imshow(inp)
-    plt.show()
-
-
 # Create List of Classes based on directory subfolders
 def get_class_names(data_dir):
     folder_names = []
@@ -132,22 +104,16 @@ def get_class_names(data_dir):
     return folder_names
 
 
-def load_data():
-    data_dir = "Images/TRAINING_&_TEST/TRAINING_&_TEST_IMAGES"
+def load_data(transform_dict, val_ratio, test_ratio):
+    cwd = pathlib.Path.cwd()
+    data_dir = cwd.joinpath("csci508_final", "Images", "TRAINING_&_TEST", "TRAINING_&_TEST_IMAGES")  # Image file path
+    # data_dir = cwd.joinpath("csci508_final", "Images", "TRIAL", "TRIAL_IMAGES")  # Image file path
     class_names = get_class_names(data_dir)
 
-    transform_dict = dict([('horizontal', True),
-                           ('vertical', True),
-                           ('rot30', True),
-                           ('noise', True),
-                           ('blur', True)])
-    val_ratio = 0.2
-    test_ratio = 0.2
-
     # Load data
-    print("Loading database of images ...")
     train_loader, val_loader, test_loader = transform_and_split_data(transform_dict, data_dir, val_ratio, test_ratio)
-    visualize_training_data(train_loader, class_names)  # Optionally visualize some images
+
+    return train_loader, val_loader, test_loader, class_names
 
 
 if __name__ == '__main__':
