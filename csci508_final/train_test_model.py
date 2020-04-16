@@ -17,11 +17,11 @@ from .architectures.model_loader import model_loader
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 cwd = pathlib.Path.cwd()
-model_file_name = "resnet50_model"
-model_save_path = cwd.joinpath("csci508_final", "saved_models")
+model_save_path = cwd.joinpath("csci508_final", "saved_models_and_results", "saved_models")
+model_results_save_path = cwd.joinpath("csci508_final", "saved_models_and_results", "saved_results")
 
 
-def main(transform_dict, model_dict, train_ratio, val_ratio, test_ratio, epochs):
+def main(transform_dict, model_dict, model_file_name, train_ratio, val_ratio, test_ratio, epochs):
     # Assuming that we are on a CUDA machine, this should print a CUDA device.
     print("Using device: ", device)
     print("")
@@ -58,14 +58,14 @@ def main(transform_dict, model_dict, train_ratio, val_ratio, test_ratio, epochs)
     # Train the network.
     print("Training the network ...")
     start_time = time.time()
-    train_model(model, train_loader, val_loader, epochs=epochs)
+    train_model(model, model_file_name, train_loader, val_loader, epochs=epochs)
     print("Total training time: %f seconds" % (time.time()-start_time))
     print("")
 
     # Test the network.
     print('Evaluating accuracy on test set ...')
     confusion_matrix = eval_test_accuracy(test_loader, model, class_names)
-    write_to_file(confusion_matrix, class_names, transform_dict, train_ratio, val_ratio, test_ratio, epochs)
+    write_to_file(confusion_matrix, model_file_name, class_names, transform_dict, train_ratio, val_ratio, test_ratio, epochs)
     print("")
 
     # Show some example classifications.
@@ -108,8 +108,8 @@ def imshow(inp, title=None):
     plt.show()
 
 
-def train_model(model, train_loader, val_loader, epochs):
-    learning_rate = 1e-4
+def train_model(model, model_file_name, train_loader, val_loader, epochs):
+    learning_rate = 1e-3
     optimizer = optim.Adam(model.fc.parameters(), lr=learning_rate)
 
     model = model.to(device=device)  # move the model parameters to CPU/GPU
@@ -190,9 +190,9 @@ def eval_test_accuracy(test_loader, model, class_names):
     return confusion_matrix
 
 
-def write_to_file(confusion_matrix, class_names, transform_dict, train_ratio, val_ratio, test_ratio, epochs):
+def write_to_file(confusion_matrix, model_file_name, class_names, transform_dict, train_ratio, val_ratio, test_ratio, epochs):
     # name of csv file
-    file_name = cwd.joinpath(model_save_path, model_file_name + "_results.csv")
+    file_name = cwd.joinpath(model_results_save_path, model_file_name + "_results.csv")
 
     class_accuracy = [confusion_matrix.diagonal() / confusion_matrix.sum(1)]
     overall_accuracy = np.sum(confusion_matrix.diagonal()) / np.sum(confusion_matrix)

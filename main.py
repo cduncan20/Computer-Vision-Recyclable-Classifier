@@ -28,14 +28,8 @@ def main():
         epoch_qty = csci.epoch_quantity.initialize_with_default_values()
 
     if args.train:
-        model_dict = csci.model_selection.interface()
-        csci.train_test_model.main(augmentations, model_dict, train_ratio, valid_ratio, test_ratio, epoch_qty)
-
-    if args.test:
-        print("This is where testing will go")
-
-    # TODO: Tyler -> Figure out a good way to manage having multiple network architectures and having them all use
-    #  'train' and 'test' flags
+        model_dict, model_file_name = csci.model_selection.interface()
+        csci.train_test_model.main(augmentations, model_dict, model_file_name, train_ratio, valid_ratio, test_ratio, epoch_qty)
 
 
 def get_args():
@@ -62,10 +56,6 @@ def get_args():
                         action="store_true",
                         default=False,
                         help='Trains the neural network to classify images from a generated pickle file')
-    parser.add_argument('--test',
-                        action='store_true',
-                        default=False,
-                        help='Tests a trained neural network and reports the results')
 
     args = parser.parse_args()
 

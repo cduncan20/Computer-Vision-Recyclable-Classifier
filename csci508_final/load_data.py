@@ -107,7 +107,6 @@ def get_class_names(data_dir):
 def load_data(transform_dict, val_ratio, test_ratio):
     cwd = pathlib.Path.cwd()
     data_dir = cwd.joinpath("csci508_final", "Images", "TRAINING_&_TEST", "TRAINING_&_TEST_IMAGES")  # Image file path
-    # data_dir = cwd.joinpath("csci508_final", "Images", "TRIAL", "TRIAL_IMAGES")  # Image file path
     class_names = get_class_names(data_dir)
 
     # Load data
