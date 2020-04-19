@@ -227,9 +227,9 @@ def write_to_file(confusion_matrix, model_file_name, class_names, transform_dict
         csvwriter.writerows(' ')
 
         # Write Data Split Info
-        csvwriter.writerow(["Training Ratio:", train_ratio])
-        csvwriter.writerow(["Validation Ratio:", val_ratio])
-        csvwriter.writerow(["Testing Ratio:", test_ratio])
+        csvwriter.writerow(["Training Ratio:", round(train_ratio, 3)])
+        csvwriter.writerow(["Validation Ratio:", round(val_ratio, 3)])
+        csvwriter.writerow(["Testing Ratio:", round(test_ratio, 3)])
         csvwriter.writerows(' ')
 
         # Write Epoch Info
