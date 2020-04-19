@@ -4,24 +4,27 @@ import pathlib
 def interface():
     print("Model Selection Manager")
     print("")
-    print("Select the image transformations you would like to add to the data. You may only select one.")
-    print("")
+    print("Select the model type you would like to train your data on. You may only select one.")
     print("Options:")
     print("[1] Resent18 -- Pre-trained")
     print("[2] Resent34 -- Pre-trained")
     print("[3] Resent50 -- Pre-trained")
     print("[4] Resent50-modnet -- Pre-trained")
+    print("[5] ResNeXt-101-32x8d -- Pre-trained")
+    print("[6] ResNeXt-101-32x8d-modnet -- Pre-trained")
     print("")
 
     model_dict = initialize_model_selection_dictionary()
 
     selected_model = input('Select model: ')
-    while selected_model not in '1234':
+    while selected_model not in '123456':
         print("Invalid argument provided. Please select a valid option below.")
         print("[1] Resent18 -- Pre-trained")
         print("[2] Resent34 -- Pre-trained")
         print("[3] Resent50 -- Pre-trained")
         print("[4] Resent50-modnet -- Pre-trained")
+        print("[5] ResNeXt-101-32x8d -- Pre-trained")
+        print("[6] ResNeXt-101-32x8d-modnet -- Pre-trained")
         print("")
         selected_model = input('Select model: ')
 
@@ -47,11 +50,21 @@ def interface():
         model_dict[model_name] = True
         print("[4] Resent50-modnet -- Pre-trained")
         model_file_name = model_file_naming(model_name)
+    elif selected_model == '5':
+        model_name = 'resNeXt-101-32x8d'
+        model_dict[model_name] = True
+        print("[5] ResNeXt-101-32x8d -- Pre-trained")
+        model_file_name = model_file_naming(model_name)
+    elif selected_model == '6':
+        model_name = 'resNeXt-101-32x8d-modnet'
+        model_dict[model_name] = True
+        print("[6] ResNeXt-101-32x8d-modnet -- Pre-trained")
+        model_file_name = model_file_naming(model_name)
     else:
         print("Invalid Augmentation key: {}".format(selected_model))
 
+    print("Model file name:", model_file_name)
     print("")
-    print(model_file_name)
     return model_dict, model_file_name
 
 
@@ -59,7 +72,9 @@ def initialize_model_selection_dictionary():
     model_dict = dict([('resnet18', False),
                        ('resnet34', False),
                        ('resnet50', False),
-                       ('resnet50-modnet', False)])
+                       ('resnet50-modnet', False),
+                       ('resNeXt-101-32x8d', False),
+                       ('resNeXt-101-32x8d-modnet', False)])
 
     return model_dict
 
