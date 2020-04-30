@@ -55,7 +55,7 @@ def get_args():
     parser.add_argument('--train',
                         action="store_true",
                         default=False,
-                        help='Trains the neural network to classify images from a generated pickle file')
+                        help='Trains the chosen model to classify dataset (defined in load_data.py)')
 
     args = parser.parse_args()
 
