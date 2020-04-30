@@ -1,5 +1,5 @@
 def interface():
-    print("Data Split Manager")
+    print("Epoch Quantity Selection Manager")
     print("")
     print("Choose how many epochs you would like to trains your model on. Default value is 5 epochs.")
     print("")
@@ -18,7 +18,7 @@ def select_new_values():
     while True:
         epoch_qty = int(input('Epoch Quantity: '))
 
-        print("You have selected to to train using {} epochs".format(epoch_qty))
+        print("You have selected to train using {} epochs".format(epoch_qty))
         confirmation = input("Is this correct? (y/n): ")
         while confirmation not in 'yn':
             confirmation = input("Invalid argument provided. Please select a valid option. Is the number "
@@ -43,6 +43,6 @@ def choose_epochs_qty():
         epoch_qty = select_new_values()
         return epoch_qty
     else:
-        print("Exiting Data Split Manager with default ratios")
+        print("Exiting Epoch Quantity Selection Manager with default epoch quantity")
         epoch_qty = initialize_with_default_values()
         return epoch_qty

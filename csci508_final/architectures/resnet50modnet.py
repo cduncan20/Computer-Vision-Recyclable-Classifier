@@ -12,10 +12,9 @@ def Net(num_classes):
 
     # Change final layer.
     # Parameters of newly constructed modules have requires_grad=True by default.
-    model.fc = nn.Sequential(nn.Linear(2048, 512),
+    model.fc = nn.Sequential(nn.Linear(num_features, 512),
                              nn.ReLU(),
-                             nn.Dropout(0.2),
-                             nn.Linear(512, num_classes),
-                             nn.LogSoftmax(dim=1))
+                             nn.Dropout(0.5),
+                             nn.Linear(512, num_classes))
 
     return model
