@@ -2,7 +2,7 @@
 
 **Name:** Casey Duncan <br />
 **Date:** 04/27/2020 <br />
-**Course:** CSCI 508 - Advance Computer Vision
+**Course:** CSCI 508 - Advance Computer Vision <br />
 **Directory Location:** ~/csci508-final/csci508_final/Images
 
 <h2>OVERVIEW</h2>
