@@ -1,74 +1,79 @@
-# csci508-final
-Final Project for Advanced Computer Vision - Recycleable Classifier 
+<h1>Recycleable Classifier - Final Project for Advanced Computer Vision </h1>
 
+**Authors:** Casey Duncan & Tyler Thune <br />
+**Date:** 04/27/2020 <br />
+**Course:** CSCI 508 - Advance Computer Vision
 
-## Using git
-git flow is going to be critical for development on this project. 
+<h2>OVERVIEW</h2>
 
-### Branches and branching best practices
-For the sake of preserving correct operation and successes `master` will be reserved for functioning and successful code that we want to be saved going forward. 
-Ongoing development will be pushed to `develop` and this branch will be where testing is done before we merge `develop` into `master`
-When developing new code it is best practice to branch off of `develop` and give your branch a descriptive name to describe the scope of the particular feature or improvement. There are many ways to go about creating branches, but one of the easiest ways is to use github itself. Tyler is happy to provide some additional information on this. 
+The objective of this project is to provide insight on the efficacy of neural networks in classifying a variety of recyclables and distinguishing which general material category an item belongs to based entirely on relatively unstructured photographs of the objects. To this end, six classes are defined for all possible municipal solid waste items: Cardboard, Glass, Metal, Paper Plastic, and Trash. Given the impressive results demonstrated by both proven and emerging neural network research, we decided to leverage a transfer learning approach using a few popular, modern network architectures to benchmark and explore the accuracy we can achieve using modern techniques on our dataset. In order to both effectively train and evaluate each network's performance appropriated a canonical approach of splitting the dataset into training, validation, and test sets.
 
-### Your development path
-When developing a new feature or continuing devleopment using version control and this collaborative style of development the biggest thing to remember is that we need to all be using each other's changes (unless there is a good reason not to). This cloud based repo provides a central ground truth upon which new development will be based. When you change code on your machine, even if it is in a branch, it will not automatically update the `remote` version on this repository. This `remote` versus `host` separation is the key concept when developing collaboratively. 
+<h2>Installation and Usage</h2>
 
-#### Updating your local code
-In order to update your local version of the git history tree use the following `bash` command:
+Installing this project can be done in a variety of ways but the suggested method relies on using a virtual environment 
+provided through [Poetry](https://python-poetry.org/docs/).
+
+It is also recommended that you use pyenv to manage your variety of python environments. Pyenv can be installed by 
+executing:
 ```
-$ git fetch
+$ curl https://pyenv.run | bash
 ```
+Additional help for setting up pyenv can be found [here](https://realpython.com/intro-to-pyenv/).
 
-In order to change branches to a different branch of name `my-branch`:
-```
-$ git checkout my-branch
-```
-Bear in mind that this only works when your local system is aware of the changes so be sure to `fetch` before trying to `checkout` a different branch.
+Once you have pyenv installed add in your preferred version of Python 3.6, or simply default to Python 3.6.9 (the latest 
+version before the release of 3.7) and set pyenv to use this version for this project. 
 
-Now that your local machine is synced with the `remote` host your machine is now aware of all of the new and close branches. Updating your local code to reflect what is hosted on the `remote` repository:
+With the project cloned to you local system, change directory into the project's top level. In order to install all of 
+the project dependencies to the virtual environment execute:
 ```
-$ git pull
-```
-
-In order to merge a different branch into your local branch the following pattern may be helpful. An example repository named `my-branch` hosted locally can be merged in using:
-```
-$ git merge my-branch
+$ poetry install
 ```
 
-If the branch is hosted on the `remote` repository:
+And in order to run this project with default settings simply execute the following from the project folder's root top level directory (csci508-final):
 ```
-$ git merge origin/my-branch
-```
-
-Once you have the local code in a state where you have accounted for changes made by everyone else you are now ready to start developing! 
-
-#### Updating the remote code 
-When you are ready to save your changes to the `remote` host you can see the files that you have added and modified by using:
-```
-$ git status
+$ poetry run python main.py
 ```
 
-In order to stage your changes you must first add them:
+At the moment, the default setting currently does not do anything, so we recommend you run it from the provided command line interface (CLI) for safely managing data and training neural networks. For in console help simply execute
 ```
-$ git add -p
+$ poetry run python main.py --help
 ```
-While there are many flags you can pass to `git add` to produce different behavior, the `-p` flag allows you to review your changes in small segments where each one must be re-approved one at a time instead of blindly adding large chunks of potentially messy or incorrect code. 
-
-Once the code is staged you must add a tag to the the updates for bookkeeping and this is done by:
+or 
 ```
-$ git commit -m "Some descriptive message telling everyone else what you did"
+$ poetry run python main.py -h
+```
+The generated menu of options will help guide the user through using any of the pre-built tools.  
+```
+$ poetry run python main.py -h
+usage: main.py [-h] [-a] [-s] [-e] [--train]
+
+optional arguments:
+  -h, --help          show this help message and exit
+  -a, --augment-data  Allows user to choose augmentations (flip horizontally,
+                      flip vertically, rotate, etc.)performed on training data
+  -s, --split-data    Allows user to choose how to split Training, Validation,
+                      & Test data
+  -e, --epoch-qty     Allows user to choose the number of epochs for training
+                      the selected model
+  --train             Trains the chosen model to classify dataset (defined in
+                      load_data.py)
 ```
 
-Now the code is finally ready to send up to the cloud. This is done by: 
-```
-$ git push
-```
+By executing with the `--train` flag the user will be prompted to select any model architecture currently implemented, which include the following:
+- ResNet18
+- ResNet34
+- ResNet50
+- ResNet50-modnet
+- ResNeXt101
+- ResNext101-modnet
 
-At this point, the code should be reflected on the remote repository and can be `pulled` and worked on by your team. 
+Note that none of these CLI options require additional arguments. Simply pass with the appropriate flag to initialize an
+interface that will guide you through changing the settings. Please reference the .pdf file titled **RecyclableClassifier_FinalReport_DuncanThune** for more information on the currently implemented model architectures and functionality of the optional arguments.
 
-#### Alterantively
-If this is all a little more than you are willing to tackle there are some GUI clients that can help you visualize and manage this flow. I highly reccommend `gitkraken`. 
-https://www.gitkraken.com/
+<h2>Data Collection</h2>
 
-This tool is great for getting started understanding git flow. If you have any questions or problems please do not hesitate to ask!
-
+In order to compare the performance of various network architectures and methods on our data we are collecting all of 
+our results in a shared google sheets project which can be found and modified 
+[here](https://drive.google.com/open?id=1LFFuCYt-rlyDO3pLFGtBgJ-dwgkvgq0lGIOQKgtxyao). Note that this is a fully mutable 
+sheet as the number and variety of possible hyper-parameters varies with architectures. This may become more 
+constrained at some point but as things evolve this flexibility is more critical than safety. 
