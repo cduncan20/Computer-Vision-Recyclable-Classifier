@@ -30,6 +30,10 @@ def main():
     if args.train:
         model_dict, model_file_name = csci.model_selection.interface()
         csci.train_test_model.main(augmentations, model_dict, model_file_name, train_ratio, valid_ratio, test_ratio, epoch_qty)
+    else:
+        print("In order to train and validate a model please re-execute this program passing the --train flag after "
+              "selecting desired settings. For additonal help please re-execute with the --help flag or refer to the "
+              "README")
 
 
 def get_args():

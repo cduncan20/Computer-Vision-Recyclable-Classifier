@@ -22,10 +22,42 @@ the project dependencies to the virtual environment execute:
 $ poetry install
 ```
 
-And in order to run this project simply execute:
+And in order to run this project with default settings simply execute from the project folder's root top level directory 
+(csci508-final):
 ```
-$ poetry run python csci508_final/main.py
+$ poetry run python main.py
 ```
+
+Please note that this package provides a command line interface (CLI) for safely managing data and training neural 
+networks. For in console help simply execute
+```
+$ poetry run python main.py --help
+```
+or 
+```
+$ poetry run python cmain.py --h
+```
+The generated menu of options will help guide the user through using any of the pre-built tools.  
+```
+$ poetry run python main.py -h
+usage: main.py [-h] [-a] [-s] [-e] [--train]
+
+optional arguments:
+  -h, --help          show this help message and exit
+  -a, --augment-data  Allows user to choose augmentations (flip horizontally,
+                      flip vertically, rotate, etc.)performed on training data
+  -s, --split-data    Allows user to choose how to split Training, Validation,
+                      & Test data
+  -e, --epoch-qty     Allows user to choose the number of epochs for training
+                      the selected model
+  --train             Trains the chosen model to classify dataset (defined in
+                      load_data.py)
+```
+
+By executing with the `--train` flag the user will be prompted to select any model architecture currently implemented. 
+
+Note that none of these CLI options require additional arguments. Simply pass with the appropriate flag to initialize an
+interface that will guide you through changing the settings. 
 
 ## Data Collection
 In order to compare the performance of various network architectures and methods on our data we are collecting all of 
